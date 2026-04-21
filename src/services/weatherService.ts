@@ -9,6 +9,7 @@ export interface Weather {
     description: string;
     humidity: number;
     windSpeed: number;
+    icon: number;
 }
 
 type WeatherError =
@@ -20,6 +21,7 @@ type AccuWeatherResponse = {
     Temperature: {
         Metric: { Value: number };
     };
+    WeatherIcon: number,
     WeatherText: string;
     RelativeHumidity: number;
     Wind: {
@@ -99,5 +101,6 @@ function transformWeatherData(city: string, data: AccuWeatherResponse): Weather 
         description: data.WeatherText,
         humidity: data.RelativeHumidity ?? 0,
         windSpeed: data.Wind?.Speed?.Metric?.Value ?? 0,
+        icon: data.WeatherIcon,
     };
 }
