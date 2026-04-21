@@ -41,9 +41,9 @@ class WeatherServiceError extends Error {
 }
 
 export async function getWeatherByCity(city: string): Promise<Weather> {
-    const locationKey = await getLocationKey(city);
-    const weatherData = await getCurrentWeather(locationKey.key);
-    return transformWeatherData(city, weatherData);
+    const location = await getLocationKey(city);
+    const weatherData = await getCurrentWeather(location.key);
+    return transformWeatherData(location.name, weatherData);
 }
 
 async function getLocationKey(city: string): Promise<Location> {
@@ -58,6 +58,7 @@ async function getLocationKey(city: string): Promise<Location> {
     }
 
     const data = await response.json();
+    console.log("LOCATION RESPONSE:", data);
 
     if (!data || data.length === 0) {
         throw new WeatherServiceError("CITY_NOT_FOUND");
@@ -69,9 +70,9 @@ async function getLocationKey(city: string): Promise<Location> {
     };
 }
 
-async function getCurrentWeather(locationKey: string): Promise<AccuWeatherResponse> {
+async function getCurrentWeather(location: string): Promise<AccuWeatherResponse> {
     const response = await fetch(
-        `${BASE_URL}/currentconditions/v1/${locationKey}?apikey=${API_KEY}`
+        `${BASE_URL}/currentconditions/v1/${location}?apikey=${API_KEY}`
     );
 
     if (!response.ok) {
@@ -79,6 +80,7 @@ async function getCurrentWeather(locationKey: string): Promise<AccuWeatherRespon
     }
 
     const data = await response.json();
+    console.log("WEATHER RESPONSE:", data);
 
     if (!data || data.length === 0) {
         throw new WeatherServiceError("WEATHER_NOT_FOUND");
@@ -88,14 +90,14 @@ async function getCurrentWeather(locationKey: string): Promise<AccuWeatherRespon
 }
 
 function transformWeatherData(city: string, data: AccuWeatherResponse): Weather {
-    if (!data?.Temperature?.Metric?.Value) {
+    if (!data?.Temperature?.Metric?.Value == null) {
         throw new WeatherServiceError("WEATHER_NOT_FOUND");
     }
     return {
         city,
         tempC: data.Temperature.Metric.Value,
         description: data.WeatherText,
-        humidity: data.RelativeHumidity,
-        windSpeed: data.Wind.Speed.Metric.Value,
+        humidity: data.RelativeHumidity ?? 0,
+        windSpeed: data.Wind?.Speed?.Metric?.Value ?? 0,
     };
 }
