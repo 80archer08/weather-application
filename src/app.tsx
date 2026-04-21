@@ -60,17 +60,15 @@ function App() {
                 loading={loading}
             />
 
+            {error && <p>{error}</p>}
+
             {weather && (
                 <WeatherCard
                     weather={weather}
                     unit={unit}
                     onToggleUnit={() => setUnit(unit === "C" ? "F" : "C")}
                 />
-            )}            
-
-            {error && <p>{error}</p>}
-
-
+            )}
         </div>
     );
 }
