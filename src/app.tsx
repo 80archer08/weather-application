@@ -1,3 +1,5 @@
+import SearchBar from "./components/searchBar";
+import WeatherCard from "./components/weatherCard";
 import { getWeatherByCity } from "./services/weatherService";
 import type { Weather } from "./services/weatherService";
 import { useState } from 'react';
@@ -24,7 +26,7 @@ function App() {
 
             setWeather(data);
         } catch (err) {
-            console.error("CAUGHT ERROR:", err);
+            //console.error("CAUGHT ERROR:", err);
             if (err instanceof Error) {
                 switch (err.message) {
                     case "CITY_NOT_FOUND":
@@ -47,44 +49,28 @@ function App() {
         }
     };
 
-    const displayTemp =
-        weather &&
-        (unit === "C"
-        ? weather.tempC
-        : (weather.tempC * 9) / 5 + 32);
-
     return (
         <div>
             <h1>Weather App</h1>
 
-            <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Enter city"
+            <SearchBar
+                city={city}
+                setCity={setCity}
+                onSearch={handleSearch}
+                loading={loading}
             />
 
-            <button onClick={handleSearch} disabled={loading}>
-                {loading ? "Loading..." : "Search"}
-            </button>
-
-            <button onClick={() => setUnit(unit === "C" ? "F" : "C")}>
-                Toggle °{unit === "C" ? "F" : "C"}
-            </button>
+            {weather && (
+                <WeatherCard
+                    weather={weather}
+                    unit={unit}
+                    onToggleUnit={() => setUnit(unit === "C" ? "F" : "C")}
+                />
+            )}            
 
             {error && <p>{error}</p>}
 
-            {weather && (
-                <div>
-                <h2>{weather.city}</h2>
-                <p>
-                    Temperature: {displayTemp?.toFixed(1)}°{unit}
-                </p>
-                <p>{weather.description}</p>
-                <p>Humidity: {weather.humidity}%</p>
-                <p>Wind Speed: {weather.windSpeed} km/h</p>
-                </div>
-            )}
+
         </div>
     );
 }
