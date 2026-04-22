@@ -89,6 +89,7 @@ Base temperature stored in Celsius:
 ### 1. Clone Repository
 
 git clone https://github.com/80archer08/weather-application
+
 cd weather-application
 
 
