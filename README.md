@@ -3,8 +3,6 @@
 ## Overview
 A simple React + TypeScript weather application that allows users to search for a city and view current weather conditions using the AccuWeather API.
 
-The application demonstrates API integration, state management, error handling, and component-based UI design.
-
 ---
 
 ## Features
@@ -13,8 +11,8 @@ The application demonstrates API integration, state management, error handling, 
   - City name
   - Temperature (Celsius / Fahrenheit toggle)
   - Weather description
-  - Humidity
-  - Wind speed
+  - Humidity (not supported by current weather component)
+  - Wind speed (not supported by current weather component)
 - Dynamic weather icons based on conditions
 - Last 5 recent searches with quick re-selection
 - Loading states and user-friendly error handling
@@ -90,8 +88,8 @@ Base temperature stored in Celsius:
 
 ### 1. Clone Repository
 
-git clone <your-repo-url>
-cd weather-app
+git clone https://github.com/80archer08/weather-application
+cd weather-application
 
 
 ### 2. Install Dependencies
@@ -133,7 +131,9 @@ http://localhost:5173
 ---
 
 ## Screenshots
-Add screenshots later
+<img width="674" height="574" alt="weather_app_ui" src="https://github.com/user-attachments/assets/4ee1dcd5-e9ab-43a3-89c4-9b4f04a10611" />
+<img width="1217" height="603" alt="weather_app_ui2" src="https://github.com/user-attachments/assets/4ac58309-8fb1-4b1a-9ce5-87693802c76d" />
+
 
 ---
 
