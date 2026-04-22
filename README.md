@@ -30,12 +30,19 @@ A simple React + TypeScript weather application that allows users to search for 
 ## Project Structure
 
 src/
+
 components/
+
 SearchBar.tsx
+
 WeatherCard.tsx
+
 services/
+
 weatherService.ts
+
 App.tsx
+
 main.tsx
 
 
