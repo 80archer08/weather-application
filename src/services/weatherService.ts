@@ -92,7 +92,9 @@ async function getCurrentWeather(location: string): Promise<AccuWeatherResponse>
 }
 
 function transformWeatherData(city: string, data: AccuWeatherResponse): Weather {
-    if (!data?.Temperature?.Metric?.Value == null) {
+    const temp = data?.Temperature?.Metric?.Value;
+
+    if (temp == null) {
         throw new WeatherServiceError("WEATHER_NOT_FOUND");
     }
     return {
@@ -101,6 +103,6 @@ function transformWeatherData(city: string, data: AccuWeatherResponse): Weather 
         description: data.WeatherText,
         humidity: data.RelativeHumidity ?? 0,
         windSpeed: data.Wind?.Speed?.Metric?.Value ?? 0,
-        icon: data.WeatherIcon,
+        icon: data.WeatherIcon ?? 0,
     };
 }
