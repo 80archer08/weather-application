@@ -10,6 +10,7 @@ function App() {
     const [error, setError] = useState<string | null>(null);
     const [unit, setUnit] = useState<"C" | "F">("C");
     const [loading, setLoading] = useState<boolean>(false);
+    const [history, setHistory] = useState<Weather[]>([]);
 
     const handleSearch = async () => {
         if (!city.trim()) {
@@ -25,6 +26,11 @@ function App() {
             const data = await getWeatherByCity(city);
 
             setWeather(data);
+
+            setHistory((prev) => {
+                const updated = [data, ...prev.filter(w => w.city !== data.city)];
+                return updated.slice(0, 5);
+            });
         } catch (err) {
             //console.error("CAUGHT ERROR:", err);
             if (err instanceof Error) {
@@ -68,6 +74,19 @@ function App() {
                     unit={unit}
                     onToggleUnit={() => setUnit(unit === "C" ? "F" : "C")}
                 />
+            )}
+
+            {history.length > 0 && (
+                <div>
+                    <h3>Recent Searches</h3>
+                    {history.map((item, index) => (
+                    <div key={index}>
+                        <button onClick={() => setWeather(item)}>
+                        {item.city}
+                        </button>
+                    </div>
+                    ))}
+                </div>
             )}
         </div>
     );

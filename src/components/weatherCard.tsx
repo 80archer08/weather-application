@@ -13,11 +13,8 @@ function WeatherCard({ weather, unit, onToggleUnit }: WeatherCardProps) {
             : (weather.tempC * 9) / 5 + 32;
     
     const getWeatherImage = (icon: number) => {
-        if (icon >= 1 && icon <= 5) return "/images/sunny.png";
-        if (icon >= 6 && icon <= 11) return "/images/cloudy.png";
-        if (icon >=12 && icon <= 18) return "/images/rain.png";
-        if (icon >= 19 && icon <= 29) return "/images/snow.png";
-        return "/images/default.png";
+    const padded = icon.toString().padStart(2, "0");
+    return `/icons/weather/${padded}.png`;
     };
     
     return (
