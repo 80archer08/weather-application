@@ -9,6 +9,7 @@ function App() {
     const [weather, setWeather] = useState<Weather | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [unit, setUnit] = useState<"C" | "F">("C");
+    const [timeFormat, setTimeFormat] = useState<"12h" | "24h">("12h");
     const [loading, setLoading] = useState<boolean>(false);
     const [history, setHistory] = useState<Weather[]>([]);
 
@@ -73,6 +74,9 @@ function App() {
                     weather={weather}
                     unit={unit}
                     onToggleUnit={() => setUnit(unit === "C" ? "F" : "C")}
+                    timeFormat={timeFormat}
+                    onToggleTimeFormat={() => setTimeFormat(timeFormat === "12h" ? "24h" : "12h")}
+                    
                 />
             )}
 
