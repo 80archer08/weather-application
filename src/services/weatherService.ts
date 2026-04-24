@@ -10,6 +10,8 @@ export interface Weather {
     humidity: number;
     windSpeed: number;
     icon: number;
+    timeEpoch: number;
+    timeZone: string;
 }
 
 type WeatherError =
@@ -29,11 +31,13 @@ type AccuWeatherResponse = {
             Metric: { Value: number };
         };
     };
+    EpochTime: number;
 };
 
 type Location = {
     key: string;
     name: string;
+    timeZone: string;
 };
 
 class WeatherServiceError extends Error {
@@ -45,7 +49,7 @@ class WeatherServiceError extends Error {
 export async function getWeatherByCity(city: string): Promise<Weather> {
     const location = await getLocationKey(city);
     const weatherData = await getCurrentWeather(location.key);
-    return transformWeatherData(location.name, weatherData);
+    return transformWeatherData(location.name, weatherData, location.timeZone);
 }
 
 async function getLocationKey(city: string): Promise<Location> {
@@ -68,7 +72,8 @@ async function getLocationKey(city: string): Promise<Location> {
 
     return {
         key: data[0].Key,
-        name: data[0].LocalizedName
+        name: data[0].LocalizedName,
+        timeZone: data[0].TimeZone.Name,
     };
 }
 
@@ -91,12 +96,13 @@ async function getCurrentWeather(location: string): Promise<AccuWeatherResponse>
     return data[0];
 }
 
-function transformWeatherData(city: string, data: AccuWeatherResponse): Weather {
+function transformWeatherData(city: string, data: AccuWeatherResponse, timeZone: string): Weather {
     const temp = data?.Temperature?.Metric?.Value;
 
     if (temp == null) {
         throw new WeatherServiceError("WEATHER_NOT_FOUND");
     }
+
     return {
         city,
         tempC: data.Temperature.Metric.Value,
@@ -104,5 +110,7 @@ function transformWeatherData(city: string, data: AccuWeatherResponse): Weather 
         humidity: data.RelativeHumidity ?? 0,
         windSpeed: data.Wind?.Speed?.Metric?.Value ?? 0,
         icon: data.WeatherIcon ?? 0,
+        timeEpoch: data.EpochTime,
+        timeZone,
     };
 }
